@@ -1,0 +1,9 @@
+all/
+projects/
+win/
+second_lab.lisp
+.portacle_root
+first_lab.lisp
+config/
+*.csv
+*.tsv
