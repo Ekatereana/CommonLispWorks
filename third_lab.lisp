@@ -11,25 +11,34 @@
 
 (defvar map_zal (simple-table:read-csv #P"map_zal-skl9.csv" t))
 (defvar mp_posts_full (simple-table:read-csv #P"mp-posts_full.csv" t))
-;;(defvar plentary_results_by_name (simple-table:read-csv #P"plentary_result_by_name-skl9.csv" t))
-;(defvar plentary_register_mps (simple-table:read-tsv #P"plentary_register_mps-skl9.tsv"))
 
 
 (print "Start work with cli-server")
 (terpri)
 
-
+;;;; text formatting
 (defun string-include (s1 s2)
   (cond
     ((zerop (length s1)) nil)
     ((> (length s2) (length s2)) nil)
     ((string= s1 (subseq s2 0 (length s1))) s1)
-    (t (string-include s1 (subseq s2 1)))
-                               ))
+    (t (string-include s1 (subseq s2 1))) ))
 
-(defun pretty_view (table col_num)
+(defun create_format_str (number str)
+  (cond
+    ((eq number 1) str)
+    (t (create_format_str
+        (- number 1)
+        (concatenate 'string str " |~20@A|")))
+    )
+  )
+
+
+(defun pretty_view (table)
   (simple-table:with-rows (table row)
-    (print  (format nil "~?"  (concatenate 'string "|~6D|" (make-string col_num ?"|~8@A|") ) 
+    (print  (format t "~?"
+                    (create_format_str
+                     (simple-table:num-cols row) "|~6@D|")
                     (coerce row 'list)))
     )
   )
@@ -40,8 +49,8 @@
     ((string= (string-downcase command) "exit") (exit))
     ((string-include "load"
                      (string-downcase command))
-                     (pretty_view map_zal (simple-table:num-cols (simple-table:get-row (0 map_zal ))) ))
-    (t (print command))
+                     (pretty_view map_zal ))
+    (t (princ command))
     )
 )
 
@@ -53,4 +62,9 @@
   (run)
   )
   
-(run)
+
+
+
+
+
+
