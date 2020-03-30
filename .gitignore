@@ -4,3 +4,4 @@ win/
 null_data/
 .portacle_root
 config/
+*.exe
