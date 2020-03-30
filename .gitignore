@@ -1,9 +1,6 @@
 all/
 projects/
 win/
-second_lab.lisp
+null_data/
 .portacle_root
-first_lab.lisp
 config/
-*.csv
-*.tsv
