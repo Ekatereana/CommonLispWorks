@@ -1,5 +1,3 @@
-
-
 ;; Third lab for LISP. Made by Gricaenko Ekatereana. IP-82
 
 
@@ -9,20 +7,23 @@
 
 (asdf:load-system 'cl-simple-table)
 
+;;import basic custom functions
 (load "formatter.lisp")
 (load "reader.lisp")
 
-
+;; add data-sources files to hash-table
 (defvar datasourse (make-hash-table :test 'equal))
-(setf (gethash "map_zal-skl9" datasourse) (read_table "map_zal-skl9.csv"))
-(setf (gethash "mp_posts_full" datasourse) (read_table "mp-posts_full.csv"))
+(setf (gethash "map_zal-skl9" datasourse) (read_table "data-sources/map_zal-skl9.csv"))
+(setf (gethash "mp_posts_full" datasourse) (read_table "data-sources/mp-posts_full.csv"))
 
-(defun load_table (name)
-  (cond
-    ((eq (gethash (car name) datasourse) nil) (print "Unknown table, try again."))
-    (t (pretty_view (gethash (car name) datasourse)))
-    )
+
+;; function select
+
+(defstruct select-statement
+  columns
+  sourse
   )
+
 
 (defun pretty_view (table)
   "print table with pretty view"
@@ -37,6 +38,15 @@
     )
  
   )
+
+;;function load-table
+(defun load_table (name)
+  (cond
+    ((eq (gethash (car name) datasourse) nil) (print "Unknown table, try again."))
+    (t (pretty_view (gethash (car name) datasourse)))
+    )
+  )
+
 
 
 (defun execute_command (command)
@@ -63,12 +73,14 @@
 
 ;; start Server
 (print "Start work with cli-server")
+;;(print "Command should ends with ;")
 (terpri)
 ;;(run)
 
-(execute_command (read-line))
+;;(execute_command (read-line))
+(let ((input (clean_list (split "select     name, gjjg, g from a") )))
+  (print (get_args input "select" "from"))
+  )
+(print (get_args (split "select name, f from g r") "select" "g"))
+(print (remove #\, "a,"))
 
-
-;(print (read_table "map_zal-skl9.csv"))
-;;(setf (gethash "0" datasourse) '1)
-;;(print (gethash "0" datasourse))

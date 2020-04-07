@@ -26,3 +26,27 @@
           do (write-char char stream))
     (push (get-output-stream-string stream) result)
     (nreverse result)))
+
+(defun clean_list (list &optional (output '()))
+  "remove spaces and comas from list"
+  (cond
+    ((null list) output)
+    ((eq (string= (car list) "") nil) (clean_list (cdr list) (append output  (list (remove #\, (car list))))))
+    (t (clean_list (cdr list) output))
+    )
+  )
+
+
+(defun get_args (list key &optional  (stop) (on) (output '()))
+  "get arg`s of query statement"
+  (cond
+    ((string= key  (car list))
+                   (get_args (cdr list) key stop (setq on t)))
+    ((string= stop (car list)) output)
+    ((eq on t) (get_args (cdr list) key stop on
+                         (append output (list (car list)))))
+    (t
+     (get_args (cdr list)
+               key stop))
+    )
+  )
