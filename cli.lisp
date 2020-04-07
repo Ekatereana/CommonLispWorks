@@ -19,11 +19,26 @@
 
 ;; function select
 
-(defstruct select-statement
+(defstruct select-statement-q
   columns
   sourse
+  condition
+  limit
   )
 
+(defun read-select (clean_list)
+  "read parts of select statement"
+  (make-select-statement-q
+   :columns (get_args clean_list "select" "from")
+   :sourse (get_args clean_list "from" "where")
+   :condition (get_args clean_list "where" "limit")
+   :limit (get_args clean_list "limit")
+   )  
+  )
+
+(defun select (statement)
+  (read-select (clean-list (split statement)))
+  )
 
 (defun pretty_view (table)
   "print table with pretty view"
@@ -78,9 +93,4 @@
 ;;(run)
 
 ;;(execute_command (read-line))
-(let ((input (clean_list (split "select     name, gjjg, g from a") )))
-  (print (get_args input "select" "from"))
-  )
-(print (get_args (split "select name, f from g r") "select" "g"))
-(print (remove #\, "a,"))
-
+(print (select "select t from j"))

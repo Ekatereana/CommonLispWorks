@@ -27,12 +27,12 @@
     (push (get-output-stream-string stream) result)
     (nreverse result)))
 
-(defun clean_list (list &optional (output '()))
+(defun clean-list (list &optional (output '()))
   "remove spaces and comas from list"
   (cond
     ((null list) output)
-    ((eq (string= (car list) "") nil) (clean_list (cdr list) (append output  (list (remove #\, (car list))))))
-    (t (clean_list (cdr list) output))
+    ((eq (string= (car list) "") nil) (clean-list (cdr list) (append output  (list (remove #\, (car list))))))
+    (t (clean-list (cdr list) output))
     )
   )
 
@@ -42,7 +42,7 @@
   (cond
     ((string= key  (car list))
                    (get_args (cdr list) key stop (setq on t)))
-    ((string= stop (car list)) output)
+    ( (or (null list) (string= stop (car list))) output)
     ((eq on t) (get_args (cdr list) key stop on
                          (append output (list (car list)))))
     (t
