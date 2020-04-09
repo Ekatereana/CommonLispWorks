@@ -1,15 +1,10 @@
-;; Third lab for LISP. Made by Gricaenko Ekatereana. IP-82
+;; Made by Gricaenko Ekatereana.
 
-
-(require 'asdf)
-
-(load "cl-simple-table/cl-simple-table.asd")
-
-(asdf:load-system 'cl-simple-table)
 
 ;;import basic custom functions
 (load "formatter.lisp")
 (load "reader.lisp")
+(load "select.lisp")
 
 ;; add data-sources files to hash-table
 (defvar datasourse (make-hash-table :test 'equal))
@@ -17,28 +12,6 @@
 (setf (gethash "mp_posts_full" datasourse) (read_table "data-sources/mp-posts_full.csv"))
 
 
-;; function select
-
-(defstruct select-statement-q
-  columns
-  sourse
-  condition
-  limit
-  )
-
-(defun read-select (clean_list)
-  "read parts of select statement"
-  (make-select-statement-q
-   :columns (get_args clean_list "select" "from")
-   :sourse (get_args clean_list "from" "where")
-   :condition (get_args clean_list "where" "limit")
-   :limit (get_args clean_list "limit")
-   )  
-  )
-
-(defun select (statement)
-  (read-select (clean-list (split statement)))
-  )
 
 (defun pretty_view (table)
   "print table with pretty view"
@@ -54,6 +27,8 @@
  
   )
 
+
+
 ;;function load-table
 (defun load_table (name)
   (cond
@@ -68,10 +43,13 @@
   "process line that user enters"
   (cond
     ((string= (string-downcase command) "exit") (exit))
-    ((string-include "load"
-                     (string-downcase command))
-       (load_table (cdr (split command)))
-     )
+    
+    ((string-include "select" (string-downcase command))
+     (select (string-downcase command)))
+    
+    ((string-include "load" (string-downcase command))
+     (load_table (cdr (split command))))
+    
     (t (princ command))
     )
   )
@@ -93,4 +71,7 @@
 ;;(run)
 
 ;;(execute_command (read-line))
-(print (select "select t from j"))
+(print (select "select row, col from map_zal-skl9"))
+
+
+

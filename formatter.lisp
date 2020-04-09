@@ -3,9 +3,9 @@
 (defun string-include (s1 s2)
   (cond
     ((zerop (length s1)) nil)
-    ((> (length s2) (length s2)) nil)
+    ((> (length s1) (length s2)) nil)
     ((string= s1 (subseq s2 0 (length s1))) s1)
-    (t (string-include s1 (subseq s2 1))) ))
+    (t (string-include s1 (subseq s2 1)))))
 
 (defun create_format_str (number str)
   (cond
@@ -31,7 +31,9 @@
   "remove spaces and comas from list"
   (cond
     ((null list) output)
-    ((eq (string= (car list) "") nil) (clean-list (cdr list) (append output  (list (remove #\, (car list))))))
+    ((eq (string= (car list) "") nil)
+     (clean-list (cdr list)
+                 (append output  (list (remove #\, (car list))))))
     (t (clean-list (cdr list) output))
     )
   )
