@@ -63,9 +63,15 @@
   "print table with pretty view"
   (let ((cl_table (table-rows table)))
     "iterator over table rows "
+    (print (format nil "~?"
+                   (create_format_str  (length (table-rows_names table)) "|~8@A|")
+                   (table-rows_names table)))
+    (print
+     (format nil "~v@{~3@A~:*~}" (* (length (table-rows_names table)) 6) "_ "))
     (simple-table:with-rows (cl_table row)
       (print  (format nil "~?"
-                      (create_format_str  (simple-table:num-cols row) "|~8@A|")  (coerce row 'list)))
+                      (create_format_str  (simple-table:num-cols row) "|~8@A|")
+                      (coerce row 'list)))
       )
     )
   

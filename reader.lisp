@@ -8,11 +8,12 @@
 
 
 
-(defun create_table ( rows &optional (filename ""))
+(defun create_table ( rows &optional (filename "")
+                                     (row_name (simple-table:get-row 0 rows)))
   (make-table
    :name (car (split filename #\.))
-   :rows_names (coerce (simple-table:get-row 0 rows) 'list)
-   :rows rows
+   :rows_names (coerce row_name 'list)
+   :rows (delete row_name  rows)
    )
   )
 

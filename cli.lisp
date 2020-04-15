@@ -55,9 +55,7 @@
 ;;(run)
 
 ;;(execute_command (read-line))
-(print (select "select distinct col, pos_y, title from test"))
-
-
+(print (select "select distinct col, pos, title from test where col = 20"))
 
 
 
