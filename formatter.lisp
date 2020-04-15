@@ -1,3 +1,8 @@
+(require 'asdf)
+
+(load "cl-simple-table/cl-simple-table.asd")
+
+(asdf:load-system 'cl-simple-table)
 
 ;;;; text formatting
 (defun string-include (s1 s2)
@@ -39,6 +44,7 @@
   )
 
 
+
 (defun get_args (list key &optional  (stop) (on) (output '()))
   "get arg`s of query statement"
   (cond
@@ -51,4 +57,16 @@
      (get_args (cdr list)
                key stop))
     )
+  )
+
+(defun pretty_view (table)
+  "print table with pretty view"
+  (let ((cl_table (table-rows table)))
+    "iterator over table rows "
+    (simple-table:with-rows (cl_table row)
+      (print  (format nil "~?"
+                      (create_format_str  (simple-table:num-cols row) "|~8@A|")  (coerce row 'list)))
+      )
+    )
+  
   )

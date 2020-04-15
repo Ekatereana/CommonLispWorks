@@ -1,8 +1,3 @@
-(require 'asdf)
-
-(load "cl-simple-table/cl-simple-table.asd")
-
-(asdf:load-system 'cl-simple-table)
 
 ;; create structure for table
 (defstruct table
