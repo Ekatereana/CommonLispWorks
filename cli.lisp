@@ -54,8 +54,10 @@
 (terpri)
 ;;(run)
 
+
 ;;(execute_command (read-line))
-(print (select "select distinct col, pos, title from test where col = 20"))
+(print (select "select col, pos_y, title from test where col > 21 and col < 24"))
+(print (select "select col, pos_y, title from test"))
 
 
 
