@@ -12,22 +12,22 @@
   )
 
 
-(defun make_query_table (basic columns distinct condition is_and is_or)
+(defun make_query_table (basic columns distinct condition is_and is_or order-by order-way)
   "build table for query"
   (let ((col_ids);; get numbers of columns that should be displayed in new table
         (new_rows (simple-table:make-table)) ;; create new table
         (row)
         (b_rows)
-        (new_names '()))
+        (new_names '())
+        (col_order))
 
-    
+    (setq col_ids  (get_col_ids (table-rows_names basic) columns))    
     ;;distinct
     (if distinct
         ;; if should build new table with unique values
-        (progn (setq col_ids (get_col_ids (table-rows_names basic) (cdr columns)))
-               (setq b_rows (distinct (table-rows basic))))
-        (progn (setq col_ids  (get_col_ids (table-rows_names basic) columns))
-               (setq b_rows (table-rows basic))))
+        (setq b_rows (distinct (table-rows basic)))
+        (setq b_rows (table-rows basic))
+        )
     
     ;;new column names for table
     (loop for id in col_ids
@@ -38,6 +38,12 @@
         (setq b_rows (where b_rows (table-rows_names basic) condition is_and is_or) ))
     ;;(print (where b_rows (table-rows_names basic) condition))   
 
+    ;;order by
+    (if order-by
+        (progn (setq col_order (get_col_ids (table-rows_names basic) order-by))
+               (setq b_rows (order_by order-way (car col_order) b_rows))))
+
+    
 
     (simple-table:with-rows (b_rows row_b)
       (setq row (simple-table:make-row));; initialize new row

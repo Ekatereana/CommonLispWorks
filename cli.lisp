@@ -56,8 +56,11 @@
 
 
 ;;(execute_command (read-line))
-(print (select "select col, pos_y, title from test where col > 21 and col < 24"))
-(print (select "select col, pos_y, title from test"))
+;(print (select "select col, pos_y, title from test where col > 21 and col < 24"))
+;(print (select "select col, pos_y, title from test"))
+(print (select "select col, pos_y, title from test order by col asc"))
+(print (select "select col, pos_y, title from test order by col desc"))
+
 
 
 

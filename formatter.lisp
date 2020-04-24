@@ -36,7 +36,7 @@
   "remove spaces and comas from list"
   (cond
     ((null list) output)
-    ((eq (string= (car list) "") nil)
+    ((not (string= (car list) ""))
      (clean-list (cdr list)
                  (append output  (list (remove #\, (car list))))))
     (t (clean-list (cdr list) output))
@@ -45,7 +45,7 @@
 
 
 
-(defun get_args (list key &optional  (stop) (on) (output '()))
+(defun get_args (list key &optional   (stop) (on) (output '()))
   "get arg`s of query statement"
   (cond
     ((string= key  (car list))
