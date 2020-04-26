@@ -6,6 +6,7 @@
 (setf (gethash "map_zal-skl9" datasourse) (read_table "data-sources/map_zal-skl9.csv"))
 (setf (gethash "mp_posts_full" datasourse) (read_table "data-sources/mp-posts_full.csv"))
 (setf (gethash "test" datasourse) (read_table "data-sources/test.csv"))
+(setf (gethash "test2" datasourse) (read_table "data-sources/test2.csv"))
 
 ;;import basic custom functions
 (load "formatter.lisp")
@@ -58,11 +59,12 @@
 ;;(execute_command (read-line))
 ;(print (select "select col, pos_y, title from test where col > 21 and col < 24"))
 ;(print (select "select col, pos_y, title from test"))
-(print (select "select col, pos_y, title from test order by col asc"))
-(print (select "select col, pos_y, title from test order by col desc"))
-(print (select "select min ( col ), title from test"))
-(print (select "select col, pos_y, title from test order by col desc"))
-(print (select "select avg ( col ) from test"))
+;(print (select "select col, pos_y, title from test order by col asc"))
+;(print (select "select col, pos_y, title from test order by col desc"))
+;(print (select "select min ( col ), title from test"))
+;(print (select "select col, pos_y, title from test order by col desc"))
+;(print (select "select avg ( col ) from test"))
+(print (select "select col, title, title2, pos_y2, pos_y from test2 inner join on test2.col = test.col"))
 
 
 

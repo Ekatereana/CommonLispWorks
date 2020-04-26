@@ -13,18 +13,25 @@
   )
 
 
-(defun make_query_table (basic columns distinct condition is_and is_or order-by order-way func args_f)
+(defun make_query_table (input_table columns distinct condition is_and is_or order-by order-way func args_f inner-join)
   "build table for query"
   (let ((col_ids);; get numbers of columns that should be displayed in new table
         (new_rows (simple-table:make-table)) ;; create new table
         (row)
         (b_rows (simple-table:make-table))
         (new_names '())
-        (col_order))
+        (col_order)
+        (basic))
 
     (cond
       ((not (or columns args_f)) nil)
       (t (progn
+
+           ;; inner join
+           (cond
+             (inner-join  (setq basic (inner_join inner-join input_table) ))
+             (t (setq basic input_table)))
+          
 
            (if args_f
                (setq col_ids (get_col_ids (table-rows_names basic) args_f)))
@@ -62,6 +69,7 @@
                      )
 
                  )
+        
            
            ;; where
            (if condition
@@ -88,7 +96,8 @@
            (return-from make_query_table (create_table new_rows (table-name basic)
                                                        new_names));; return instance of table-structure
 
-           ))
+           )
+         )
       )
     )
   )

@@ -44,10 +44,65 @@
     (push (get-output-stream-string stream) result)
     (nreverse result)))
 
+
+
+
+
+
+(defun merge_key_worlds (list)
+  (let ((result '())
+        (buffer "")
+        (iterator)
+        (is_found)
+        (key))
+
+    (loop for arg in list
+          do
+          (setq iterator 0)
+          (setq is_found nil)
+          ;; loop for all key-words
+          (loop while
+                (and (< iterator (length key-words-query)) (not is_found))
+                
+                do
+                (setq key (nth iterator key-words-query))
+                (if (string= key arg)
+                    (progn (setq is_found T)
+                           (setq result (append result (list arg))))
+                    
+                    (if (string-include arg key)
+                        (progn (if (= (length buffer) 0)
+                                   (setq buffer (concatenate 'string buffer arg))
+                                   (setq buffer (concatenate 'string buffer " " arg)))
+                               (setq is_found T)))
+
+                    )
+
+                
+                (setq iterator (+ 1 iterator))
+
+                )
+          (if (not is_found)
+              (progn (if (position buffer key-words-query :test #'string=)
+                         (progn (setq result (append result (list buffer)))
+                                (setq buffer "")))
+                     (setq result (append result (list arg)))
+                  )
+              
+              
+              )
+
+          )
+    
+    (return-from merge_key_worlds result)
+
+    )           
+
+  )
 (defun clean-list (list &optional (output '()))
   "remove spaces and comas from list"
   (cond
-    ((null list) output)
+    ((null list) (merge_key_worlds output))
     ((not (string= (car list) ""))
      (clean-list (cdr list)
                  (append output  (list (remove #\, (car list))))))

@@ -5,6 +5,10 @@
   columns
   is_distinct
   sourse
+  inner-join
+  full-outer-join
+  left-join
+  right-join
   condition
   and
   or
@@ -13,20 +17,23 @@
   limit
   )
 
+
+(defvar key-words-query)
+(setq key-words-query '( "(" ")"  "select" "from" "inner join on" "full outer join on"
+                        "left join on"
+                        "right join on" "where" "order by" "limit"))
+
+(defvar function-words-query)
+(setq function-words-query '( "min" "avg"))
+
 ;; function select
 (load "distinct.lisp")
 (load "where.lisp")
 (load "orderby.lisp")
 (load "functions.lisp")
 (load "query-builder.lisp")
+(load "innerjoin.lisp")
 
-
-
-(defvar key-words-query)
-(setq key-words-query '( "(" ")"  "select" "from" "where" "order" "limit"))
-
-(defvar function-words-query)
-(setq function-words-query '( "min" "avg"))
 
 (defun is_second (probably query)
   (let ((iterator (position  probably key-words-query :test #'string=)))
@@ -67,11 +74,12 @@
      :columns  (delete "distinct" (get_args clean_list (is_second "(" query) "from"))
      :is_distinct (string-include "distinct" query )
      :sourse (get_args clean_list "from" (is_second "from" query))
+     :inner-join (get_args clean_list "inner join on" (is_second "inner join on" query))
      :condition (get_args clean_list "where" (is_second "where" query))
      :and (string-include "and" query)
      :or (string-include "or" query)
      :order-way (get_order_way query)
-     :order-by (delete "by" (get_args clean_list "order" (get_order_way query)))
+     :order-by (get_args clean_list "order" (get_order_way query))
      :limit (get_args clean_list "limit")
      
      )  
@@ -89,6 +97,7 @@
           )
       ;; identify table that we use.    
       (setq table (gethash (car (select-statement-sourse query)) datasourse))
+     ;; (print query)
       (cond
         ((null table) (print "ERROR::: Unknown table, please try again"))
         ((string-include statement  "*")
@@ -104,7 +113,8 @@
              (select-statement-order-by query)
              (select-statement-order-way query)
              (select-statement-function query)
-             (select-statement-args_of_func query))))
+             (select-statement-args_of_func query)
+             (select-statement-inner-join query))))
         )
       ))
 
