@@ -1,11 +1,7 @@
-;; function select
-(load "distinct.lisp")
-(load "where.lisp")
-(load "orderby.lisp")
-(load "query-builder.lisp")
-
 
 (defstruct select-statement
+  function
+  args_of_func
   columns
   is_distinct
   sourse
@@ -17,21 +13,32 @@
   limit
   )
 
+;; function select
+(load "distinct.lisp")
+(load "where.lisp")
+(load "orderby.lisp")
+(load "functions.lisp")
+(load "query-builder.lisp")
+
 
 
 (defvar key-words-query)
-(setq key-words-query '( "from" "where" "order" "limit"))
+(setq key-words-query '( "(" ")"  "select" "from" "where" "order" "limit"))
+
+(defvar function-words-query)
+(setq function-words-query '( "min" "avg"))
 
 (defun is_second (probably query)
   (let ((iterator (position  probably key-words-query :test #'string=)))
     (loop while (< iterator (length key-words-query))
           do (if (string-include (nth (+ 1 iterator) key-words-query) query)
-                 (setq probably (nth (+ 1 iterator) key-words-query))
+                 (progn  ( setq probably (nth (+ 1 iterator) key-words-query))
+                         (return-from is_second probably))
+                
                  )
              (setq iterator (+ 1 iterator))
             
           )
-    (return-from is_second probably)
     )
   )
 
@@ -43,12 +50,21 @@
     (t nil))
   )
 
+(defun get_function_name (qeury)
+  (cond
+    ((string-include "min" qeury) "min")
+    ((string-include "avg" qeury) "avg")
+    (t nil))
+  )
 
 (defun read-select (query)
   "read parts of select statement"
   (let ((clean_list (clean-list (split query))))
+
     (make-select-statement
-     :columns (delete "distinct" (get_args clean_list "select" "from"))
+     :function (get_function_name query)
+     :args_of_func (get_args clean_list "(" ")")
+     :columns  (delete "distinct" (get_args clean_list (is_second "(" query) "from"))
      :is_distinct (string-include "distinct" query )
      :sourse (get_args clean_list "from" (is_second "from" query))
      :condition (get_args clean_list "where" (is_second "where" query))
@@ -86,7 +102,9 @@
              (select-statement-and query)
              (select-statement-or query)
              (select-statement-order-by query)
-             (select-statement-order-way query))))
+             (select-statement-order-way query)
+             (select-statement-function query)
+             (select-statement-args_of_func query))))
         )
       ))
 

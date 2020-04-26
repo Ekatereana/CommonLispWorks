@@ -1,16 +1,16 @@
 ;; Made by Gricaenko Ekatereana.
 
-;;import basic custom functions
-(load "formatter.lisp")
-(load "reader.lisp")
-(load "select.lisp")
-
 
 ;; add data-sources files to hash-table
 (defvar datasourse (make-hash-table :test 'equal))
 (setf (gethash "map_zal-skl9" datasourse) (read_table "data-sources/map_zal-skl9.csv"))
 (setf (gethash "mp_posts_full" datasourse) (read_table "data-sources/mp-posts_full.csv"))
 (setf (gethash "test" datasourse) (read_table "data-sources/test.csv"))
+
+;;import basic custom functions
+(load "formatter.lisp")
+(load "reader.lisp")
+(load "select.lisp")
 
 
 ;;function load-table
@@ -60,6 +60,9 @@
 ;(print (select "select col, pos_y, title from test"))
 (print (select "select col, pos_y, title from test order by col asc"))
 (print (select "select col, pos_y, title from test order by col desc"))
+(print (select "select min ( col ), title from test"))
+(print (select "select col, pos_y, title from test order by col desc"))
+(print (select "select avg ( col ) from test"))
 
 
 
