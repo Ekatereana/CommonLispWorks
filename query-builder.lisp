@@ -25,7 +25,8 @@
                          args_f
                          inner-join
                          full-outer-join
-                         right-join)
+                         right-join
+                         left-join)
   "build table for query"
   (let ((col_ids);; get numbers of columns that should be displayed in new table
         (new_rows (simple-table:make-table)) ;; create new table
@@ -44,7 +45,8 @@
            (cond
              (inner-join  (setq basic (inner_join inner-join input_table)))
              (full-outer-join (setq basic (full_outer_join full-outer-join input_table)))
-             (right-join (setq basic (right_join right-join input_table)))
+             (right-join (setq basic (side_join right-join input_table T)))
+             (left-join (setq basic (side_join left-join input_table NIL)))
              (t (setq basic input_table)))
           
           
@@ -70,7 +72,7 @@
            ;;distinct
            (if distinct
                ;; if should build new table with unique values
-               (setq b_rows (distinct (b_rows)))
+               (setq b_rows (distinct b_rows))
                )
            
            ;;new column names for table

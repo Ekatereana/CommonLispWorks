@@ -41,7 +41,7 @@
 (load "query-builder.lisp")
 (load "innerjoin.lisp")
 (load "fullouterjoin.lisp")
-(load "rightjoin.lisp")
+(load "sidejoin.lisp")
 
 
 (defun is_second (probably query)
@@ -89,6 +89,7 @@
                               (get_args clean_list "full outer join" (is_second "full outer join" query))
                               :test #'string=)
      :right-join (delete "on" (get_args clean_list "right join" (is_second "right join" query)) :test #'string=)
+     :left-join (delete "on" (get_args clean_list "left join" (is_second "left join" query)) :test #'string=)
      :condition (get_args clean_list "where" (is_second "where" query))
      :and (string-include "and" query)
      :or (string-include "or" query)
@@ -130,7 +131,8 @@
              (select-statement-args_of_func query)
              (select-statement-inner-join query)
              (select-statement-full-outer-join query)
-             (select-statement-right-join query))))
+             (select-statement-right-join query)
+             (select-statement-left-join query))))
         )
       ))
 
