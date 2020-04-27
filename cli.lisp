@@ -1,5 +1,8 @@
 ;; Made by Gricaenko Ekatereana.
 
+;;import basic custom functions
+(load "formatter.lisp")
+(load "reader.lisp")
 
 ;; add data-sources files to hash-table
 (defvar datasourse (make-hash-table :test 'equal))
@@ -8,9 +11,7 @@
 (setf (gethash "test" datasourse) (read_table "data-sources/test.csv"))
 (setf (gethash "test2" datasourse) (read_table "data-sources/test2.csv"))
 
-;;import basic custom functions
-(load "formatter.lisp")
-(load "reader.lisp")
+
 (load "select.lisp")
 
 
@@ -65,7 +66,7 @@
 ;(print (select "select col, pos_y, title from test order by col desc"))
 ;(print (select "select avg ( col ) from test"))
 (print (select "select col, title, title2, pos_y2, pos_y from test2 inner join on test2.col = test.col"))
-
+(print (select "select col, title, title2, pos_y2, pos_y from test2 full outer join on test2.col = test.col where col < 26"))
 
 
 

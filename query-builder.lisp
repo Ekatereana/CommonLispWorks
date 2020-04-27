@@ -13,7 +13,7 @@
   )
 
 
-(defun make_query_table (input_table columns distinct condition is_and is_or order-by order-way func args_f inner-join)
+(defun make_query_table (input_table columns distinct condition is_and is_or order-by order-way func args_f inner-join full-outer-join)
   "build table for query"
   (let ((col_ids);; get numbers of columns that should be displayed in new table
         (new_rows (simple-table:make-table)) ;; create new table
@@ -27,9 +27,11 @@
       ((not (or columns args_f)) nil)
       (t (progn
 
-           ;; inner join
+           
+           ;; inner join or full outer join
            (cond
-             (inner-join  (setq basic (inner_join inner-join input_table) ))
+             (inner-join  (setq basic (inner_join inner-join input_table)))
+             (full-outer-join (setq basic (full_outer_join full-outer-join input_table)))
              (t (setq basic input_table)))
           
 

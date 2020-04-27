@@ -33,6 +33,7 @@
 (load "functions.lisp")
 (load "query-builder.lisp")
 (load "innerjoin.lisp")
+(load "fullouterjoin.lisp")
 
 
 (defun is_second (probably query)
@@ -75,6 +76,7 @@
      :is_distinct (string-include "distinct" query )
      :sourse (get_args clean_list "from" (is_second "from" query))
      :inner-join (get_args clean_list "inner join on" (is_second "inner join on" query))
+     :full-outer-join (get_args clean_list "full outer join on" (is_second "full outer join on" query))
      :condition (get_args clean_list "where" (is_second "where" query))
      :and (string-include "and" query)
      :or (string-include "or" query)
@@ -114,7 +116,8 @@
              (select-statement-order-way query)
              (select-statement-function query)
              (select-statement-args_of_func query)
-             (select-statement-inner-join query))))
+             (select-statement-inner-join query)
+             (select-statement-full-outer-join query))))
         )
       ))
 
