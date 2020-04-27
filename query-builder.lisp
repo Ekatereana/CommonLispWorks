@@ -13,7 +13,19 @@
   )
 
 
-(defun make_query_table (input_table columns distinct condition is_and is_or order-by order-way func args_f inner-join full-outer-join)
+(defun make_query_table (input_table
+                         columns
+                         distinct
+                         condition
+                         is_and
+                         is_or
+                         order-by
+                         order-way
+                         func
+                         args_f
+                         inner-join
+                         full-outer-join
+                         right-join)
   "build table for query"
   (let ((col_ids);; get numbers of columns that should be displayed in new table
         (new_rows (simple-table:make-table)) ;; create new table
@@ -32,7 +44,9 @@
            (cond
              (inner-join  (setq basic (inner_join inner-join input_table)))
              (full-outer-join (setq basic (full_outer_join full-outer-join input_table)))
+             (right-join (setq basic (right_join right-join input_table)))
              (t (setq basic input_table)))
+          
           
 
            (if args_f
@@ -40,7 +54,8 @@
            
            (if columns
                (setq col_ids  (append col_ids (get_col_ids (table-rows_names basic) columns))))
-          
+
+     
 
            (setq b_rows (copy-seq (table-rows basic)))
            ;;function
@@ -93,7 +108,7 @@
              
              (simple-table:add-to-table row new_rows) ;; add new row to table
              )
-           
+          
            
            (return-from make_query_table (create_table new_rows (table-name basic)
                                                        new_names));; return instance of table-structure

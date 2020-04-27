@@ -2,16 +2,18 @@
   sourse1
   name-col1
   sourse2
-  name-col2)
+  name-col2
+  right-sourse)
 
 (defun read_join (statement)
-  (let ((parse_head (split (nth 0 statement) #\.))
-        (parse_back (split (nth 2 statement) #\.)))
+  (let ((parse_head (split (nth 1 statement) #\.))
+        (parse_back (split (nth 3 statement) #\.)))
     (make-join-statement
      :sourse1 (car parse_head )
      :name-col1 (cdr parse_head )
      :sourse2 (car parse_back)
      :name-col2 (cdr parse_back)
+     :right-sourse (car statement)
      )
     )
   )

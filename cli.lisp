@@ -65,8 +65,11 @@
 ;(print (select "select min ( col ), title from test"))
 ;(print (select "select col, pos_y, title from test order by col desc"))
 ;(print (select "select avg ( col ) from test"))
-(print (select "select col, title, title2, pos_y2, pos_y from test2 inner join on test2.col = test.col"))
-(print (select "select col, title, title2, pos_y2, pos_y from test2 full outer join on test2.col = test.col where col < 26"))
+(print (select "select col, title, title2, pos_y2, pos_y from test2 inner join test  on test2.col = test.col"))
+(print (select "select col, title, title2, pos_y2, pos_y from test2 full outer join test  on test2.col = test.col where col < 26"))
+(print (select "select col, title, title2 from test2 right join test on test2.col = test.col "))
+(print (select "select col, title, title2 from test right join test2 on test2.col = test.col "))
+
 
 
 

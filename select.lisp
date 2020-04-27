@@ -19,9 +19,16 @@
 
 
 (defvar key-words-query)
-(setq key-words-query '( "(" ")"  "select" "from" "inner join on" "full outer join on"
-                        "left join on"
-                        "right join on" "where" "order by" "limit"))
+(setq key-words-query '( "(" ")"
+                        "select"
+                        "from"
+                        "inner join"
+                        "full outer join"
+                        "left join"
+                        "right join"
+                        "where"
+                        "order by"
+                        "limit"))
 
 (defvar function-words-query)
 (setq function-words-query '( "min" "avg"))
@@ -34,6 +41,7 @@
 (load "query-builder.lisp")
 (load "innerjoin.lisp")
 (load "fullouterjoin.lisp")
+(load "rightjoin.lisp")
 
 
 (defun is_second (probably query)
@@ -75,8 +83,12 @@
      :columns  (delete "distinct" (get_args clean_list (is_second "(" query) "from"))
      :is_distinct (string-include "distinct" query )
      :sourse (get_args clean_list "from" (is_second "from" query))
-     :inner-join (get_args clean_list "inner join on" (is_second "inner join on" query))
-     :full-outer-join (get_args clean_list "full outer join on" (is_second "full outer join on" query))
+     :inner-join (delete "on" (get_args clean_list "inner join" (is_second "inner join" query))
+                         :test #'string=)
+     :full-outer-join (delete "on"
+                              (get_args clean_list "full outer join" (is_second "full outer join" query))
+                              :test #'string=)
+     :right-join (delete "on" (get_args clean_list "right join" (is_second "right join" query)) :test #'string=)
      :condition (get_args clean_list "where" (is_second "where" query))
      :and (string-include "and" query)
      :or (string-include "or" query)
@@ -117,7 +129,8 @@
              (select-statement-function query)
              (select-statement-args_of_func query)
              (select-statement-inner-join query)
-             (select-statement-full-outer-join query))))
+             (select-statement-full-outer-join query)
+             (select-statement-right-join query))))
         )
       ))
 
