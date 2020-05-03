@@ -152,7 +152,7 @@
 
 
 
-(defun where (table-rows table-names statement is_and is_or)
+(defun where (table-rows table-names statement &optional is_and is_or)
   "implementation of where operation"
   (let ((result (simple-table:make-table))
         (id-s '())

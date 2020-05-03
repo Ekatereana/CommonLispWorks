@@ -79,10 +79,6 @@
 
         )
   
-
-   
-
-    
     
    
     (setq result (create_table new_rows table-name  new_names))

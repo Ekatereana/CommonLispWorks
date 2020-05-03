@@ -21,6 +21,8 @@
                          is_or
                          order-by
                          order-way
+                         group-by
+                         having
                          func
                          args_f
                          inner-join
@@ -60,12 +62,30 @@
      
 
            (setq b_rows (copy-seq (table-rows basic)))
+           ;;group by
+           (if group-by
+               (setq b_rows
+                     (group_by b_rows
+                               (get_col_ids (table-rows_names basic) group-by)
+                               (get_col_ids (table-rows_names basic) group-by))))
+
+       
+           
            ;;function
            (if func
-               (if (< (length col_ids) 2)
-                   (setq b_rows (create_result_of_function b_rows (car col_ids) func NIL))
-                   (setq b_rows (create_result_of_function b_rows (car col_ids) func T))
-                   )
+               (cond
+                 (group-by
+                  (setq b_rows
+                        (create_result_of_function
+                         b_rows
+                         (car col_ids)
+                         func
+                         T
+                         (get_col_ids (table-rows_names basic) group-by))) )
+                 (t (if (< (length col_ids) 2)
+                        (setq b_rows (create_result_of_function b_rows (car col_ids) func NIL))
+                        (setq b_rows (create_result_of_function b_rows (car col_ids) func T))
+                        )))
                )
 
            
@@ -94,6 +114,12 @@
            (if condition
                (setq b_rows (where b_rows (table-rows_names basic) condition is_and is_or) ))
            ;;(print (where b_rows (table-rows_names basic) condition))
+
+          
+           ;;having
+           (if having
+               (setq b_rows (having b_rows (table-rows_names basic) having)))
+
 
            ;;order by
            (if order-by

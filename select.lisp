@@ -14,6 +14,8 @@
   or
   order-by
   order-way
+  group-by
+  having
   limit
   )
 
@@ -28,6 +30,8 @@
                         "right join"
                         "where"
                         "order by"
+                        "group by"
+                        "having"
                         "limit"))
 
 (defvar function-words-query)
@@ -42,6 +46,8 @@
 (load "innerjoin.lisp")
 (load "fullouterjoin.lisp")
 (load "sidejoin.lisp")
+(load "groupby.lisp")
+(load "having.lisp")
 
 
 (defun is_second (probably query)
@@ -94,7 +100,9 @@
      :and (string-include "and" query)
      :or (string-include "or" query)
      :order-way (get_order_way query)
-     :order-by (get_args clean_list "order" (get_order_way query))
+     :order-by (get_args clean_list "order by" (get_order_way query))
+     :group-by (get_args clean_list "group by" (is_second "group by" query))
+     :having (get_args clean_list "having" (is_second "having" query))
      :limit (get_args clean_list "limit")
      
      )  
@@ -112,7 +120,7 @@
           )
       ;; identify table that we use.    
       (setq table (gethash (car (select-statement-sourse query)) datasourse))
-     ;; (print query)
+      ;;(print query)
       (cond
         ((null table) (print "ERROR::: Unknown table, please try again"))
         ((string-include statement  "*")
@@ -127,6 +135,8 @@
              (select-statement-or query)
              (select-statement-order-by query)
              (select-statement-order-way query)
+             (select-statement-group-by query)
+             (select-statement-having query)
              (select-statement-function query)
              (select-statement-args_of_func query)
              (select-statement-inner-join query)
