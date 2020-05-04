@@ -4,6 +4,8 @@
   args_of_func
   columns
   is_distinct
+  case
+  case-name
   sourse
   inner-join
   full-outer-join
@@ -23,6 +25,9 @@
 (defvar key-words-query)
 (setq key-words-query '( "(" ")"
                         "select"
+                        "case"
+                        "end"
+                        "as"
                         "from"
                         "inner join"
                         "full outer join"
@@ -48,6 +53,7 @@
 (load "sidejoin.lisp")
 (load "groupby.lisp")
 (load "having.lisp")
+(load "case.lisp")
 
 
 (defun is_second (probably query)
@@ -86,8 +92,10 @@
     (make-select-statement
      :function (get_function_name query)
      :args_of_func (get_args clean_list "(" ")")
-     :columns  (delete "distinct" (get_args clean_list (is_second "(" query) "from"))
+     :columns  (delete "distinct" (get_args clean_list (is_second "(" query) (is_second "select" query)))
      :is_distinct (string-include "distinct" query )
+     :case (get_args clean_list "case" "end")
+     :case-name (get_args clean_list "as" (is_second "as" query))
      :sourse (get_args clean_list "from" (is_second "from" query))
      :inner-join (delete "on" (get_args clean_list "inner join" (is_second "inner join" query))
                          :test #'string=)
@@ -120,7 +128,7 @@
           )
       ;; identify table that we use.    
       (setq table (gethash (car (select-statement-sourse query)) datasourse))
-      ;;(print query)
+     ;; (print query)
       (cond
         ((null table) (print "ERROR::: Unknown table, please try again"))
         ((string-include statement  "*")
@@ -142,7 +150,9 @@
              (select-statement-inner-join query)
              (select-statement-full-outer-join query)
              (select-statement-right-join query)
-             (select-statement-left-join query))))
+             (select-statement-left-join query)
+             (select-statement-case query)
+             (select-statement-case-name query))))
         )
       ))
 

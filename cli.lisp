@@ -71,7 +71,7 @@
 ;(print (select "select col, title, title2 from test right join test2 on test2.col = test.col "))
 ;;(print (select "select col, title, title2 from test left join test2 on test2.col = test.col "))
 (print (select "select avg ( pos_y2 ), col, title2  from test2 group by col having avg ( pos_y2 ) > 52 "))
-
+(print (select "select col, pos_y2, title2, case  when col > 24 then 'The Greater than 24' when col < 24 then 'The smaller than 24' end as text from test2"))
 
 
 

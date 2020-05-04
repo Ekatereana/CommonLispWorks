@@ -33,6 +33,7 @@
   list
   )
 
+
 (defun split (string &optional (split-character #\Space))
   (let ((result '())
         (stream (make-string-output-stream)))

@@ -28,7 +28,9 @@
                          inner-join
                          full-outer-join
                          right-join
-                         left-join)
+                         left-join
+                         case
+                         case-name)
   "build table for query"
   (let ((col_ids);; get numbers of columns that should be displayed in new table
         (new_rows (simple-table:make-table)) ;; create new table
@@ -95,6 +97,11 @@
                (setq b_rows (distinct b_rows))
                )
            
+       
+           ;;case
+           (if case
+               (setq b_rows (case_end b_rows (table-rows_names basic)  case) ))
+
            ;;new column names for table
            (loop for id in col_ids
                  do
@@ -108,8 +115,13 @@
                      )
 
                  )
-        
            
+           (if case-name
+               (progn
+                 (setq new_names (append new_names case-name))
+                 (setq col_ids (append col_ids (list (length (table-rows_names basic))))))     
+               )
+
            ;; where
            (if condition
                (setq b_rows (where b_rows (table-rows_names basic) condition is_and is_or) ))
